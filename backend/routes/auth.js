@@ -1,15 +1,36 @@
 const express = require('express');
 const User = require('../models/User.js');
 const router = express.Router();
+const { body, validationResult } = require('express-validator'); //but first we have to install "npm install express-validator" visit https://express-validator.github.io/docs/guides/getting-started for docs
 
 
 //Create a user using POST "/api/auth". Doesn't require Authentication
-router.post('/', (req, res)=>{                  //replace .get with .post becoz we are posting/sending data,, Use GET when you are fetching data 
-    //if we want to use req.body we have to use a middleware i.e.app.use(express.json())
-    console.log(req.body);                      //we have added a object in request's body in thunder client  
-    const user = User(req.body);                //request data from body compare with User Model and store in user
-    user.save()                                 //to save user data in DB that we have created in mongoDB Compass
-    res.send(req.body);                         //send response to see the data in thunder client
+// router.post('/', [all validations in array], (req, res)=>{                  
+//     console.log(req.body);                      
+//     const user = User(req.body);                
+//     user.save()                                 
+//     res.send(req.body);                         
+// })
+
+router.post('/', [
+    body('name', 'Enter a valid name').isLength({min: 3}),
+    body('email', 'Enter a valid email').isEmail(),
+    body('password', 'Your password is too short').isLength({min: 5})
+], (req, res)=>{                  
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({errors: errors.array()});      //400 -> Bad request
+    }
+    User.create({               //creating user in database
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+    }).then(user => res.json(user))                     //json response at thunder client
+    .catch(err=> {console.log(err)                      //log error in terminal
+        res.json({error: 'Email already Registered!'})  //json errro response in thunder client
+    })
+
+
 })
 
 module.exports = router
