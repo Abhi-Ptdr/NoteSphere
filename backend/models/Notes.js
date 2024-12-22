@@ -1,5 +1,6 @@
 //Keep file name with 1st letter capital 
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const NotesSchema = new Schema({
     title: {
