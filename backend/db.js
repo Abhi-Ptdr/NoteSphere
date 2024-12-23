@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const mongoURI = "mongodb://localhost:27017/Abhishek";  //creates "user" collection in "Abhishek" Database name
+const mongoURI = "mongodb://localhost:27017/NoteSphere";  //creates "user" collection in "NoteSphere" Database name
 
 const connectToMongo = async () => {
   try {
