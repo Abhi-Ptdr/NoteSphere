@@ -4,11 +4,12 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator'); 
 const bcrypt = require('bcryptjs'); 
 const jwt = require('jsonwebtoken');
+const fetchuser = require('../middleware/fetchuser');       // .. because we are going back one directory to go into middleware folder
 
 
 const JWT_SECRET = "AbhiIs$goodBoy"         //we will store it in secret file like .env.local ot ignore to push publicly
 
-//Create a user using POST "/api/auth/createuser". No login required
+//ROUTE 1: Create a user using POST "/api/auth/createuser". No login required
 router.post('/createuser', [
     body('name', 'Enter a valid name').isLength({min: 3}),
     body('email', 'Enter a valid email').isEmail(),
@@ -51,7 +52,7 @@ router.post('/createuser', [
 })
 
 //LOGIN ENDPOINT
-//Authenticate a user using POST "/api/auth/login". No login required
+//ROUTE 2: Authenticate a user using POST "/api/auth/login". No login required
 
 router.post('/login', [
     //Validations
@@ -89,6 +90,20 @@ router.post('/login', [
         res.json({authtoken});
 
     }catch(error) {
+        console.log(error.message);
+        res.status(500).send("Internal server Error");
+    }
+})
+
+
+//ROUTE 3: Get logedin user data using POST "/api/auth/getuser". Login required
+
+router.post('/getuser', fetchuser, async (req, res)=>{
+    try {
+        userId = req.user.id;
+        const user = await User.findById(userId).select("-password")    //selecting everything exept password
+        res.send(user)
+    } catch (error) {
         console.log(error.message);
         res.status(500).send("Internal server Error");
     }
