@@ -12,13 +12,13 @@ function App() {
     <NoteState>   {/*State varible are now available in all the components and sub-components inside this <NoteState> tag*/}
       <Router>
         <Navbar/>
-        <Routes>
-          <Route exact path="/" element={<Home/>} />
-          <Route exact path="/about" element={<About/>} /> {/* for eg. we can use that state in this About compo go to about compo to see how*/ }
-          
-        </Routes>
+        <div className="container">
+          <Routes>
+            <Route exact path="/" element={<Home/>} />
+            <Route exact path="/about" element={<About/>} /> {/* for eg. we can use that state in this About compo go to about compo to see how*/ }
+          </Routes>
+        </div>
       </Router>
-      <h1>This is noteSphere</h1>
     </NoteState>
     </>
   );
