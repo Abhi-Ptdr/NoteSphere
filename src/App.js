@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Home from './components/Home';
 import About from './components/About';
 import NoteState from './context/notes/NoteState';
+import Alert from './components/Alert';
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
     <NoteState>   {/*State varible are now available in all the components and sub-components inside this <NoteState> tag*/}
       <Router>
         <Navbar/>
+        <Alert message="React Is Amezing"/>
         <div className="container">
           <Routes>
             <Route exact path="/" element={<Home/>} />
