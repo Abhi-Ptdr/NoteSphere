@@ -3,7 +3,11 @@ connectToMongo();
 
 const express = require('express')
 const app = express()
-const port = 5000       //because 3000 will be used by our React app
+const port = 5000
+
+var cors = require('cors')  //but first "npm install cors"
+app.use(cors())           //Express CORS is a middleware package for Express.js that allows you to easily enable Cross-Origin Resource Sharing (CORS) in your applications.
+
 
 //if we want to use req.body we have to use a middleware i.e.
 app.use(express.json())
