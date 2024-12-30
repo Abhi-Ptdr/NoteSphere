@@ -60,6 +60,7 @@ router.post('/login', [
     body('password', 'Password can not be blank').exists()
 
 ], async (req, res)=>{ 
+    let success = false;
     //if there are errors, return bad request and the errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -71,12 +72,14 @@ router.post('/login', [
         //checking if user with inserted email registered or not
         let user = await User.findOne({email});
         if(!user){
+            success = false;
             return res.status(400).json({error: "Incorrect Credentials"});
         }
         //Check if password inserted is coreect
         const passwordCompare = await bcrypt.compare(password, user.password);      //password is the inserted one and user.password is the hashed password from the DB
         if(!passwordCompare){
-            return res.status(400).json({error: "Incorrect Credentials"});
+            success = false;
+            return res.status(400).json({success, error: "Incorrect Credentials"});
         }
 
         //if both email and password are match fetch user data with unique id
@@ -87,7 +90,8 @@ router.post('/login', [
         }
         //generating and sending authtoken using jwt(json web token)
         const authtoken = jwt.sign(data, JWT_SECRET);
-        res.json({authtoken});
+        success = true;
+        res.json({success, authtoken});
 
     }catch(error) {
         console.log(error.message);
