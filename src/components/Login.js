@@ -15,7 +15,7 @@ function Login(props) {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjc2OTM3MmRjYzYyY2FjNWVhMmJkOGNmIn0sImlhdCI6MTczNTAyMzI0NH0.w57j63HKkNbjvjar0pnAXmWh1bGZzsBUCAImSJGwAL4"
+        "auth-token": localStorage.getItem('token')
       },
       body: JSON.stringify({email:credentials.email, password:credentials.password})
     });
@@ -25,8 +25,8 @@ function Login(props) {
     if (json.success) {
       //save the auth token and redirect
       localStorage.setItem('token', json.authtoken);
-      navigate("/");
       props.showAlert("Loged in Successfully", "success");
+      navigate("/");
     }
     else{
       props.showAlert("Invalid Credentials", "danger");
@@ -39,12 +39,13 @@ function Login(props) {
 }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className='mt-3'>
+      <h2>Login to continue to NoteSphere</h2>
+
+      <form className='mt-3' onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="email">Email address</label>
           <input type="email" className="form-control" id="email" name="email" value={credentials.email} onChange={onChange} aria-describedby="emailHelp" placeholder="Enter email"/>
-          <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
         </div>
         <div className="form-group">
           <label htmlFor="password">Password</label>

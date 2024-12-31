@@ -25,8 +25,8 @@ function Signup(props) {
     if (json.success) {
       //save the auth token and redirect
       localStorage.setItem('token', json.authtoken);
-      navigate("/");
       props.showAlert("Account Created Successfully", "success");
+      navigate("/");
     }
     else{
       props.showAlert("Invalid Credentials", "danger");
@@ -39,9 +39,10 @@ function Signup(props) {
   }
 
   return (
-    <div className='container'>
+    <div className='container mt-2'>
+      <h2 className='my-2'>Create an account to use NoteSphere</h2>
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
+        <div className="my-3">
           <label htmlFor="name" className="form-label">Name</label>
           <input type="text" className="form-control" id="name" onChange={onChange} name="name" aria-describedby="emailHelp"/>
         </div>

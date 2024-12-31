@@ -16,7 +16,7 @@ const NoteState = (props) => {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
-          "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjc2OTM3MmRjYzYyY2FjNWVhMmJkOGNmIn0sImlhdCI6MTczNTAyMzI0NH0.w57j63HKkNbjvjar0pnAXmWh1bGZzsBUCAImSJGwAL4"
+          "auth-token": localStorage.getItem('token')
         }
       });
       const json = await response.json(); //parse the response in json
@@ -30,7 +30,7 @@ const NoteState = (props) => {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
-          "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjc2OTM3MmRjYzYyY2FjNWVhMmJkOGNmIn0sImlhdCI6MTczNTAyMzI0NH0.w57j63HKkNbjvjar0pnAXmWh1bGZzsBUCAImSJGwAL4"
+          "auth-token": localStorage.getItem('token')
         },
         body: JSON.stringify({title, description,  tag})    //means title:title, tag:tag etc.
       });
@@ -45,10 +45,11 @@ const NoteState = (props) => {
         method: "DELETE",
         headers: {
           'Content-Type': 'application/json',
-          "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjc2OTM3MmRjYzYyY2FjNWVhMmJkOGNmIn0sImlhdCI6MTczNTAyMzI0NH0.w57j63HKkNbjvjar0pnAXmWh1bGZzsBUCAImSJGwAL4"
+          "auth-token": localStorage.getItem('token')
         }
       });
       const json =  response.json();
+      console.log(json);
       const newNotes = notes.filter((note)=>{return note._id !== id}) //returns all notes except the note with _id = id, means removed
       setNotes(newNotes);
     }
@@ -60,11 +61,12 @@ const NoteState = (props) => {
         method: "PUT",
         headers: {
           'Content-Type': 'application/json',
-          "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjc2OTM3MmRjYzYyY2FjNWVhMmJkOGNmIn0sImlhdCI6MTczNTAyMzI0NH0.w57j63HKkNbjvjar0pnAXmWh1bGZzsBUCAImSJGwAL4"
+          "auth-token": localStorage.getItem('token')
         },
         body: JSON.stringify({title, description,  tag})
       });
       const json =  await response.json();
+      console.log(json)
       
       let newNotes = JSON.parse(JSON.stringify(notes))
       //Logic to edit in client side
