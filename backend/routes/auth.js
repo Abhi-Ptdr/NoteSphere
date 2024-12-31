@@ -15,15 +15,16 @@ router.post('/createuser', [
     body('email', 'Enter a valid email').isEmail(),
     body('password', 'Your password is too short').isLength({min: 5})
 ], async (req, res)=>{                  
+    let success = false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
+        return res.status(400).json({success, errors: errors.array()});
     }
     try{
         // check whether the user with this email alredy exist
         let user = await User.findOne({email: req.body.email});
         if(user){
-            return res.status(400).json({error: "Sorry this email already registered"});
+            return res.status(400).json({success, error: "Sorry this email already registered"});
         }
 
         //password hashing
@@ -43,7 +44,9 @@ router.post('/createuser', [
             }
         }
         const authtoken = jwt.sign(data, JWT_SECRET);           //sign() is an synchronus fxn so no need of await and it take two arg.
-        res.json({authtoken});
+        
+        success = true;
+        res.json({success, authtoken});
 
     } catch(error){
         console.log(error.message);
@@ -72,13 +75,11 @@ router.post('/login', [
         //checking if user with inserted email registered or not
         let user = await User.findOne({email});
         if(!user){
-            success = false;
-            return res.status(400).json({error: "Incorrect Credentials"});
+            return res.status(400).json({success, error: "Incorrect Credentials"});
         }
         //Check if password inserted is coreect
         const passwordCompare = await bcrypt.compare(password, user.password);      //password is the inserted one and user.password is the hashed password from the DB
         if(!passwordCompare){
-            success = false;
             return res.status(400).json({success, error: "Incorrect Credentials"});
         }
 
